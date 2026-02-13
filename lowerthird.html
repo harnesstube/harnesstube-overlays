@@ -73,28 +73,30 @@ function load(){
   fetch(`https://opensheet.elk.sh/${SHEET_ID}/${TAB}?t=${Date.now()}`)
     .then(r => r.json())
     .then(d => {
+      // DEBUG: show raw JSON
+      document.getElementById("l1").innerText =
+        "DEBUG JSON: " + JSON.stringify(d);
+
       if(!d || !d.length) return;
       const row = d[0];
 
-      document.getElementById("l1").innerText = row.Horse || "";
       document.getElementById("driver").innerText = row.Driver || "";
       document.getElementById("trainer").innerText = row.Trainer || "";
       document.getElementById("l3").innerText = row.Note || "";
-
-      const photo = row.PhotoURL && row.PhotoURL.trim() !== ""
-        ? row.PhotoURL
-        : "photos/default.png";
-
-      document.getElementById("photo").src = photo;
     })
-    .catch(err => console.error("Lowerthird sheet error", err));
+    .catch(err => {
+      document.getElementById("l1").innerText =
+        "FETCH ERROR: " + err;
+    });
 }
 
 load();
-setInterval(load, 1000);
+setInterval(load, 2000);
 </script>
+
 
 </body>
 </html>
+
 
 
