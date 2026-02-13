@@ -69,24 +69,40 @@ overflow:visible;
 const SHEET_ID = "1O74vkMwUFDURoplB0S6xnwmTnD1T7kXTy7FuExzaK3c";
 const TAB = "lowerthird";
 
+function set(id, value){
+  const el = document.getElementById(id);
+  if(el) el.innerText = value;
+}
+
 function load(){
   fetch(`https://opensheet.elk.sh/${SHEET_ID}/${TAB}?t=${Date.now()}`)
     .then(r => r.json())
     .then(d => {
-      // DEBUG: show raw JSON
-      document.getElementById("l1").innerText =
-        "DEBUG JSON: " + JSON.stringify(d);
 
-      if(!d || !d.length) return;
+      set("l1", "DEBUG OK");
+
+      if(!d || !d.length){
+        set("l1", "DEBUG: EMPTY DATA");
+        return;
+      }
+
       const row = d[0];
 
-      document.getElementById("driver").innerText = row.Driver || "";
-      document.getElementById("trainer").innerText = row.Trainer || "";
-      document.getElementById("l3").innerText = row.Note || "";
+      set("l1", row.Horse || "");
+      set("driver", row.Driver || "");
+      set("trainer", row.Trainer || "");
+      set("l3", row.Note || "");
+
+      const img = document.getElementById("photo");
+      if(img){
+        img.src = row.PhotoURL && row.PhotoURL.trim() !== ""
+          ? row.PhotoURL
+          : "photos/default.png";
+      }
     })
     .catch(err => {
-      document.getElementById("l1").innerText =
-        "FETCH ERROR: " + err;
+      set("l1", "FETCH ERROR");
+      console.error(err);
     });
 }
 
@@ -95,8 +111,10 @@ setInterval(load, 2000);
 </script>
 
 
+
 </body>
 </html>
+
 
 
 
