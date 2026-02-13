@@ -69,51 +69,47 @@ overflow:visible;
 const SHEET_ID = "1O74vkMwUFDURoplB0S6xnwmTnD1T7kXTy7FuExzaK3c";
 const TAB = "lowerthird";
 
-function set(id, value){
-  const el = document.getElementById(id);
-  if(el) el.innerText = value;
-}
-
 function load(){
-  fetch(`https://opensheet.elk.sh/${SHEET_ID}/${TAB}?t=${Date.now()}`)
+  fetch(`https://opensheet.elk.sh/${SHEET_ID}/${TAB}`)
     .then(r => r.json())
     .then(d => {
 
-      set("l1", "DEBUG OK");
-
-      if(!d || !d.length){
-        set("l1", "DEBUG: EMPTY DATA");
-        return;
-      }
+      // Guard: if API returns an error object
+      if(!Array.isArray(d) || !d.length) return;
 
       const row = d[0];
 
-      set("l1", row.Horse || "");
-      set("driver", row.Driver || "");
-      set("trainer", row.Trainer || "");
-      set("l3", row.Note || "");
+      const l1 = document.getElementById("l1");
+      const driver = document.getElementById("driver");
+      const trainer = document.getElementById("trainer");
+      const l3 = document.getElementById("l3");
+      const photo = document.getElementById("photo");
 
-      const img = document.getElementById("photo");
-      if(img){
-        img.src = row.PhotoURL && row.PhotoURL.trim() !== ""
-          ? row.PhotoURL
-          : "photos/default.png";
+      if(l1) l1.innerText = row.Horse || "";
+      if(driver) driver.innerText = row.Driver || "";
+      if(trainer) trainer.innerText = row.Trainer || "";
+      if(l3) l3.innerText = row.Note || "";
+
+      if(photo){
+        photo.src =
+          row.PhotoURL && row.PhotoURL.trim() !== ""
+            ? row.PhotoURL
+            : "photos/default.png";
       }
     })
-    .catch(err => {
-      set("l1", "FETCH ERROR");
-      console.error(err);
-    });
+    .catch(err => console.error("Lowerthird fetch error:", err));
 }
 
 load();
-setInterval(load, 2000);
+setInterval(load, 1000);
 </script>
+
 
 
 
 </body>
 </html>
+
 
 
 
