@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+</head>
+
+<body style="margin:0;background:transparent;font-family:'Montserrat', Arial, sans-serif;">
+
+<div id="bug" style="
+position:absolute;
+top:40px;
+left:40px;
+width:720px;
+height:120px;
+display:flex;
+align-items:center;
+background:rgba(48,48,48,0.9);
+color:white;
+border-radius:12px 12px 40px 12px;
+box-shadow:0 8px 20px rgba(0,0,0,0.7);
+overflow:hidden;
+">
+
+  <!-- Race Number -->
+  <div id="l1" style="
+    width:120px;
+    font-size:100px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    line-height:1;
+    flex-shrink:0;
+  "></div>
+
+  <!-- Green Bar -->
+  <div style="
+    width:14px;
+    height:100%;
+    background:#00AF50;
+    flex-shrink:0;
+  "></div>
+
+  <!-- Right Content -->
+  <div style="
+    padding:14px 24px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:6px;
+    width:100%;
+  ">
+
+    <!-- Location -->
+    <div id="l2" style="
+      font-size:42px;
+      font-weight:700;
+      line-height:1.05;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    "></div>
+
+    <!-- Date -->
+    <div id="l3" style="
+      font-size:22px;
+      opacity:0.9;
+    "></div>
+
+    <!-- Condition / Gait / Purse -->
+    <div style="
+      font-size:22px;
+      line-height:1.15;
+    ">
+      <span id="l4"></span>
+      <span style="opacity:0.6;"> | </span>
+      <span id="l5"></span>
+      <span style="opacity:0.6;"> | </span>
+      <span id="l6"></span>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+window.onload = function() {
+
+  function load(){
+    fetch("racebug.txt?ts=" + Date.now())
+    .then(r => r.text())
+    .then(t => {
+      let l = t.split(/\r?\n/);
+
+      if(document.getElementById("l1")) document.getElementById("l1").innerText = l[0] || "";
+      if(document.getElementById("l2")) document.getElementById("l2").innerText = l[1] || "";
+      if(document.getElementById("l3")) document.getElementById("l3").innerText = l[2] || "";
+      if(document.getElementById("l4")) document.getElementById("l4").innerText = l[3] || "";
+      if(document.getElementById("l5")) document.getElementById("l5").innerText = l[4] || "";
+      if(document.getElementById("l6")) document.getElementById("l6").innerText = l[5] || "";
+    });
+  }
+
+  load();
+  setInterval(load, 1000);
+}
+</script>
+
+</body>
+</html>
