@@ -66,22 +66,28 @@ overflow:visible;
 </div>
 
 <script>
-function load(){
- fetch("./lowerthird.txt?ts=" + Date.now())
- .then(r => r.text())
- .then(t => {
-   let l = t.split(/\r?\n/);
-   document.getElementById("l1").innerText = l[0] || "";
-   document.getElementById("driver").innerText = l[1] || "";
-   document.getElementById("trainer").innerText = l[2] || "";
-   document.getElementById("l3").innerText = l[3] || "";
- });
+const SHEET_ID = "1O74vkMwUFDURoplB0S6xnwmTnD1T7kXTy7FuExzaK3c";
+const TAB = "lowerthird";
 
- fetch("./driver_photo.txt?ts=" + Date.now())
- .then(r => r.text())
- .then(t => {
-   document.getElementById("photo").src = t.trim() || "photos/default.png";
- });
+function load(){
+  fetch(`https://opensheet.elk.sh/${SHEET_ID}/${TAB}`)
+    .then(r => r.json())
+    .then(d => {
+      if(!d || !d.length) return;
+      const row = d[0];
+
+      document.getElementById("l1").innerText = row.Horse || "";
+      document.getElementById("driver").innerText = row.Driver || "";
+      document.getElementById("trainer").innerText = row.Trainer || "";
+      document.getElementById("l3").innerText = row.Note || "";
+
+      const photo = row.PhotoURL && row.PhotoURL.trim() !== ""
+        ? row.PhotoURL
+        : "photos/default.png";
+
+      document.getElementById("photo").src = photo;
+    })
+    .catch(err => console.error("Lowerthird sheet error", err));
 }
 
 load();
@@ -90,3 +96,4 @@ setInterval(load, 1000);
 
 </body>
 </html>
+
