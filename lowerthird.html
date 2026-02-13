@@ -70,7 +70,7 @@ const SHEET_ID = "1O74vkMwUFDURoplB0S6xnwmTnD1T7kXTy7FuExzaK3c";
 const TAB = "lowerthird";
 
 function load(){
-  fetch(`https://opensheet.elk.sh/${SHEET_ID}/${TAB}`)
+  fetch(`https://opensheet.elk.sh/${SHEET_ID}/${TAB}?t=${Date.now()}`)
     .then(r => r.json())
     .then(d => {
       if(!d || !d.length) return;
@@ -96,4 +96,5 @@ setInterval(load, 1000);
 
 </body>
 </html>
+
 
