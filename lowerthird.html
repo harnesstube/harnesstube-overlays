@@ -1,35 +1,42 @@
 <script>
-const SHEET_ID = "1O74vkMwUFDURoplB0S6xnwmTnD1T7kXTy7FuExzaK3c";
-const TAB = "lowerthird";
+window.onload = function () {
 
-function load(){
-  fetch(`https://opensheet.elk.sh/${SHEET_ID}/${TAB}`)
-    .then(r => r.json())
-    .then(d => {
-      if(!Array.isArray(d) || !d.length) return;
-      const row = d[0];
+  const SHEET_ID = "1O74vkMwUFDURoplB0S6xnwmTnD1T7kXTy7FuExzaK3c";
+  const TAB = "lowerthird";
 
-      const l1 = document.getElementById("l1");
-      const driver = document.getElementById("driver");
-      const trainer = document.getElementById("trainer");
-      const l3 = document.getElementById("l3");
-      const photo = document.getElementById("photo");
+  function load(){
+    fetch(`https://opensheet.elk.sh/${SHEET_ID}/${TAB}`)
+      .then(r => r.json())
+      .then(d => {
+        if(!Array.isArray(d) || !d.length) return;
+        const row = d[0];
 
-      if(l1) l1.innerText = row.Horse || "";
-      if(driver) driver.innerText = row.Driver || "";
-      if(trainer) trainer.innerText = row.Trainer || "";
-      if(l3) l3.innerText = row.Note || "";
+        const l1 = document.getElementById("l1");
+        const driver = document.getElementById("driver");
+        const trainer = document.getElementById("trainer");
+        const l3 = document.getElementById("l3");
+        const photo = document.getElementById("photo");
 
-      if(photo){
-        photo.src =
-          row.PhotoURL && row.PhotoURL.trim() !== ""
-            ? row.PhotoURL
-            : "photos/default.png";
-      }
-    })
-    .catch(err => console.error("Lowerthird error:", err));
-}
+        if(l1) l1.innerText = row.Horse || "";
+        if(driver) driver.innerText = row.Driver || "";
+        if(trainer) trainer.innerText = row.Trainer || "";
+        if(l3) l3.innerText = row.Note || "";
 
-load();
-setInterval(load, 1000);
+        if(photo){
+          photo.src =
+            row.PhotoURL && row.PhotoURL.trim() !== ""
+              ? row.PhotoURL
+              : "photos/default.png";
+        }
+      })
+      .catch(err => {
+        console.error("Lowerthird fetch error", err);
+      });
+  }
+
+  load();
+  setInterval(load, 1000);
+};
 </script>
+
+
